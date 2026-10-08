@@ -1,0 +1,7 @@
+# Installed per machine by Install-Module/Install-PSResource, Install-Script, Update-Help and PowerToys
+Modules/
+Scripts/
+Help/
+
+# Machine-local secrets and overrides
+*.local.*

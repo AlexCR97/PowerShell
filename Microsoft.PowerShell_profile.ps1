@@ -1,2 +1,5 @@
+. "$PSScriptRoot\Get-PublicIP.ps1"
 . "$PSScriptRoot\Reset-DockerData.ps1"
+. "$PSScriptRoot\Save-Audio.ps1"
+. "$PSScriptRoot\Show-Spinner.ps1"
 . "$PSScriptRoot\Use-Temporal.ps1"

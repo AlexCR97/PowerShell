@@ -6,7 +6,10 @@ My personal PowerShell 7 profile shared between my machines.
 
 | Function                 | Description                                                                                                                                                  |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `Get-PublicIP`           | Prints the machine's public IP address, with a spinner while it is fetched.                                                                                  |
 | `Reset-DockerData`       | Wizard that deletes Docker Desktop's WSL 2 data disk to reclaim its space, wiping every image, container, volume and build cache. Confirms before each step. |
+| `Save-Audio`             | Downloads audio from a URL as MP3 with `yt-dlp`, organized by platform and playlist. Offers to install `yt-dlp` via winget when missing.                     |
+| `Show-Spinner`           | Runs a script block as a background job behind a spinner and returns its output. Helper for `Get-PublicIP`.                                                  |
 | `Use-Temporal <profile>` | Points the `temporal` CLI at one profile of `Use-Temporal.local.json` for the current session. Tab-completes profile names.                                  |
 | `Clear-Temporal`         | Clears the `temporal` CLI environment set by `Use-Temporal`.                                                                                                 |
 

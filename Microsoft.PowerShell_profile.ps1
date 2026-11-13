@@ -2,4 +2,5 @@
 . "$PSScriptRoot\Reset-DockerData.ps1"
 . "$PSScriptRoot\Save-Audio.ps1"
 . "$PSScriptRoot\Show-Spinner.ps1"
+. "$PSScriptRoot\Use-KubeContext.ps1"
 . "$PSScriptRoot\Use-Temporal.ps1"

@@ -1,4 +1,6 @@
 . "$PSScriptRoot\Get-PublicIP.ps1"
+. "$PSScriptRoot\Mongo.ps1"
+. "$PSScriptRoot\Read-MenuChoice.ps1"
 . "$PSScriptRoot\Reset-DockerData.ps1"
 . "$PSScriptRoot\Save-Audio.ps1"
 . "$PSScriptRoot\Show-Spinner.ps1"

@@ -4,15 +4,18 @@ My personal PowerShell 7 profile shared between my machines.
 
 ## Functions
 
-| Function                 | Description                                                                                                                                                  |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `Get-PublicIP`           | Prints the machine's public IP address, with a spinner while it is fetched.                                                                                  |
-| `Reset-DockerData`       | Wizard that deletes Docker Desktop's WSL 2 data disk to reclaim its space, wiping every image, container, volume and build cache. Confirms before each step. |
-| `Save-Audio`             | Downloads audio from a URL as MP3 with `yt-dlp`, organized by platform and playlist. Offers to install `yt-dlp` via winget when missing.                     |
-| `Show-Spinner`           | Runs a script block as a background job behind a spinner and returns its output. Helper for `Get-PublicIP`.                                                  |
-| `Use-KubeContext`        | Switches `kubectl` to a context and namespace picked from lists by number or part of the name. Asks for the namespace by name if the cluster is unreachable. |
-| `Use-Temporal <profile>` | Points the `temporal` CLI at one profile of `Use-Temporal.local.json` for the current session. Tab-completes profile names.                                  |
-| `Clear-Temporal`         | Clears the `temporal` CLI environment set by `Use-Temporal`.                                                                                                 |
+| Function                                | Description                                                                                                                                                   |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Connect-Mongo [<profile>]`             | Opens `mongosh` on a profile of `Mongo.local.json`, tab-completed or picked from a list. `-Database` overrides its database; other arguments go to `mongosh`. |
+| `Invoke-MongoScript <file> [<profile>]` | Runs a `mongosh` script file against a profile and prints its output, e.g. to redirect into an sdlc artifact capture. Takes `-Database` too.                  |
+| `Get-PublicIP`                          | Prints the machine's public IP address, with a spinner while it is fetched.                                                                                   |
+| `Write-Menu`, `Read-Choice`             | Print a numbered list and read a pick by number or part of a name. Helpers for `Use-KubeContext` and `Connect-Mongo`.                                         |
+| `Reset-DockerData`                      | Wizard that deletes Docker Desktop's WSL 2 data disk to reclaim its space, wiping every image, container, volume and build cache. Confirms before each step.  |
+| `Save-Audio`                            | Downloads audio from a URL as MP3 with `yt-dlp`, organized by platform and playlist. Offers to install `yt-dlp` via winget when missing.                      |
+| `Show-Spinner`                          | Runs a script block as a background job behind a spinner and returns its output. Helper for `Get-PublicIP`.                                                   |
+| `Use-KubeContext`                       | Switches `kubectl` to a context and namespace picked from lists by number or part of the name. Asks for the namespace by name if the cluster is unreachable.  |
+| `Use-Temporal <profile>`                | Points the `temporal` CLI at one profile of `Use-Temporal.local.json` for the current session. Tab-completes profile names.                                   |
+| `Clear-Temporal`                        | Clears the `temporal` CLI environment set by `Use-Temporal`.                                                                                                  |
 
 ## Setup on a new machine
 
@@ -45,4 +48,29 @@ git checkout -f -t origin/main
     }
   }
 }
+```
+
+### MongoDB profiles
+
+`Connect-Mongo` and `Invoke-MongoScript` read their profiles from `Mongo.local.json` in this folder, which is gitignored because the connection strings hold passwords. Copy it from another machine or create it. Name each profile after its environment, so a capture of an sdlc artifact can be named after it too (`probe.qa.output.txt`). `database` is optional and `-Database` overrides it:
+
+```json
+{
+  "dev": {
+    "uri": "mongodb+srv://<user>:<password>@<dev-cluster>/?authSource=admin",
+    "database": "enrollment"
+  },
+  "qa": {
+    "uri": "mongodb+srv://<user>@<qa-cluster>/?authSource=admin"
+  }
+}
+```
+
+The database goes into the URI's path, and a URI without `authSource` authenticates against that database. Set `authSource` explicitly to the database the user was created in, usually `admin`, or switching databases breaks the login. Leave the password out of a URI to have `mongosh` prompt for it.
+
+Arguments after the profile go to `mongosh`, in its `--long` form so PowerShell does not take them as its own:
+
+```powershell
+Connect-Mongo qa --eval "db.getCollectionNames()"
+Invoke-MongoScript .\probe.js qa > .\probe.qa.output.txt
 ```

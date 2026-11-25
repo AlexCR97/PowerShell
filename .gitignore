@@ -5,3 +5,6 @@ Help/
 
 # Machine-local secrets and overrides
 *.local.*
+
+# Database dumps and exports kept in the current directory by the Mongo functions
+.mongo/
